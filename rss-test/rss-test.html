@@ -1,0 +1,14 @@
+<head>
+  <title>rss-test</title>
+</head>
+
+<body>
+  <h1>Welcome to Meteor!</h1>
+  {{> namesTemplate}}
+</body>
+
+<template name="namesTemplate">
+  {{#each names}}
+  <p>{{name}}</p>
+  {{/each}}
+</template>
