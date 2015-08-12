@@ -22,13 +22,22 @@ if (Meteor.isServer) {
   //    })
   //  }
   //}
-var xml = "<config><test>Hello</test><data>SomeData</data></config>";
+  var xml = "<config><test>Hello</test><data>SomeData</data></config>";
+  
+  function eatXMLvomitJSON(inputXML) {
+    var outputJSON;
+    xml2js.parseString(inputXML, function(err, res) {
+      outputJSON = res;
+    });
+    return outputJSON; 
+  }
 
-var extractedData = "";
-xml2js.parseString(xml, function(err,result){
-  //Extract the value from the data element
-  extractedData = result['config']['data'];
-  console.log(extractedData);
-});
-console.log("Note that you can't use value here if parseString is async; extractedData=", extractedData);
+  console.log(eatXMLvomitJSON(xml));
+
+  var extractedData = "";
+  xml2js.parseString(xml, function(err,result){
+    //Extract the value from the data element
+    extractedData = result['config']['data'];
+    console.log(extractedData);
+  });
 }
