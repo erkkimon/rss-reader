@@ -9,3 +9,5 @@ autopublish
 insecure
 http
 anonyfox:scrape
+sergeyt:jquery-xml2json
+peerlibrary:xml2js
