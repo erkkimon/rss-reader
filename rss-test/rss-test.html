@@ -4,11 +4,11 @@
 
 <body>
   <h1>Welcome to Meteor!</h1>
-  {{> namesTemplate}}
+  {{> newsTemplate}}
 </body>
 
-<template name="namesTemplate">
-  {{#each names}}
-  <p>{{name}}</p>
+<template name="newsTemplate">
+  {{#each newsItems}}
+  <p>{{title}}</p>
   {{/each}}
 </template>

@@ -2,8 +2,8 @@ News = new Mongo.Collection("news");
 
 if (Meteor.isClient) {
 
-  Template.namesTemplate.helpers({
-    names: function () {
+  Template.newsTemplate.helpers({
+    newsItems: function () {
       return News.find().fetch();
     }
   });
@@ -21,7 +21,13 @@ if (Meteor.isServer) {
     return outputJSON; 
   }
 
+  // Do necessary stuff to a single feed
   feedJSON = url2json("http://yle.fi/uutiset/rss/paauutiset.rss");
-  console.log(feedJSON.item[3]);
+  for(var i in feedJSON.item) {
+    var feedItem = feedJSON.item[i];
+    News.insert({
+      "title": feedItem.title
+    });
+  }
 
 }
