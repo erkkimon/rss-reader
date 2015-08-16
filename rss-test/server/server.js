@@ -11,19 +11,12 @@ function url2json(inputURL) {
 	return outputJSON;
 }
 
-var allFeedURLs = [
-	"http://yle.fi/uutiset/rss/paauutiset.rss", 
-	"http://www.iltalehti.fi/rss.xml"
-]
-
-for(n in allFeedURLs) {
-
+function processFeed(url) {
 	// Handle one feed, will be only one in an array
-	feedJSON = url2json(allFeedURLs[n]);
-
+	feedJSON = url2json(url);
 	// Loop through feed item's details
 	for(var i in feedJSON.item) {
-
+	
 		// If link is not already added, let's add data related to it in MongoDB 
 		var feedItem = feedJSON.item[i];
 		var urlFreqCount = News.find({link: feedItem.link}).count();
@@ -48,6 +41,18 @@ for(n in allFeedURLs) {
 		} else {
 			console.log("URL already in News collection: " + feedItem.link);
 		}
+	}
+}
 
+var allFeedURLs = [
+	"http://yle.fi/uutiset/rss/paauutiset.rss", 
+	"http://www.iltalehti.fi/rss.xml"
+]
+
+for(i in allFeedURLs) {
+	try {
+		processFeed(allFeedURLs[i])
+	} catch(e) {
+		console.log("Failed to insert data to MongoDB from feed url " + allFeedURLs[i]);
 	}
 }
