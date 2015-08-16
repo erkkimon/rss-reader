@@ -25,15 +25,21 @@ if (Meteor.isServer) {
     return outputJSON;
   }
 
-  console.log(url2json("http://yle.fi/uutiset/rss/paauutiset.rss"));
 
-  // Do necessary stuff to a single feed
-  //feedJSON = url2json("http://yle.fi/uutiset/rss/paauutiset.rss");
-  //for(var i in feedJSON.item) {
-  //  var feedItem = feedJSON.item[i];
-  //  News.insert({
-  //    "title": feedItem.title
-  //  });
-  //}
+  feedJSON = url2json("http://yle.fi/uutiset/rss/paauutiset.rss");
+  for(var i in feedJSON.item) {
+    var feedItem = feedJSON.item[i];
+    function image() { try { return feedItem.enclosure[0].$.url } catch(e) { return null } }
+    News.insert({
+      "title": feedItem.title,
+      "link": feedItem.link,
+      "description": feedItem.description,
+      "timestamp": Date.parse(feedItem.pubDate)/1000,
+      "categories": feedItem.category,
+      //"image": function() { try { return feedItem.enclosure[0].$.url } catch(e) { return "0" } }
+      "image": image() 
+    });
+  }
+  //console.log(feedJSON.item[0].enclosure[0].$.url);
 
 }

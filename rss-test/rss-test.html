@@ -8,7 +8,16 @@
 </body>
 
 <template name="newsTemplate">
-  {{#each newsItems}}
-  <p>{{title}}</p>
-  {{/each}}
+  <table>
+    {{#each newsItems}}
+    <tr>
+      <td>{{title}}</td>
+      <td>{{link}}</td>
+      <td>{{description}}</td>
+      <td>{{timestamp}}</td>
+      <td>{{categories}}</td>
+      <td>{{image}}</td>
+    </tr>
+    {{/each}}
+  </table>
 </template>
