@@ -25,21 +25,29 @@ if (Meteor.isServer) {
     return outputJSON;
   }
 
-
+	// Handle one feed, will be only one in an array
   feedJSON = url2json("http://yle.fi/uutiset/rss/paauutiset.rss");
-  for(var i in feedJSON.item) {
-    var feedItem = feedJSON.item[i];
-    function image() { try { return feedItem.enclosure[0].$.url } catch(e) { return null } }
-    News.insert({
-      "title": feedItem.title,
-      "link": feedItem.link,
-      "description": feedItem.description,
-      "timestamp": Date.parse(feedItem.pubDate)/1000,
-      "categories": feedItem.category,
-      //"image": function() { try { return feedItem.enclosure[0].$.url } catch(e) { return "0" } }
-      "image": image() 
-    });
-  }
-  //console.log(feedJSON.item[0].enclosure[0].$.url);
 
+	// Loop through feed item's details
+  for(var i in feedJSON.item) {
+
+		// If link is not already added, let's add data related to it in MongoDB 
+    var feedItem = feedJSON.item[i];
+		var urlFreqCount = News.find({link: feedItem.link}).count();
+		if(urlFreqCount === 0) {
+			// Don't try to add image if it doesn't exist
+    	function image() { try { return feedItem.enclosure[0].$.url } catch(e) { return null } }
+    	News.insert({
+    	  "title": feedItem.title,
+    	  "link": feedItem.link,
+    	  "description": feedItem.description,
+    	  "timestamp": Date.parse(feedItem.pubDate)/1000,
+    	  "categories": feedItem.category,
+    	  "image": image() 
+    	});
+			console.log("URL was not yet in News collection: " + feedItem.link);
+		} else {
+			console.log("URL already in News collection: " + feedItem.link);
+		}
+  }
 }
