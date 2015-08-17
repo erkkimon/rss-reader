@@ -1,5 +1,5 @@
 Template.newsTemplate.helpers({
 	newsItems: function () {
-		return News.find().fetch();
+		return News.find({}, {sort: {timestamp: -1}});
 	}
 });
