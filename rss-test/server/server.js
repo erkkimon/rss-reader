@@ -11,7 +11,7 @@ function url2json(inputURL) {
 	return outputJSON;
 }
 
-function processFeed(url) {
+function processSingleFeed(url) {
 	// Handle one feed, will be only one in an array
 	feedJSON = url2json(url);
 	// Loop through feed item's details
@@ -44,15 +44,24 @@ function processFeed(url) {
 	}
 }
 
-var allFeedURLs = [
-	"http://yle.fi/uutiset/rss/paauutiset.rss", 
-	"http://www.iltalehti.fi/rss.xml"
-]
-
-for(i in allFeedURLs) {
-	try {
-		processFeed(allFeedURLs[i])
-	} catch(e) {
-		console.log("Failed to insert data to MongoDB from feed url " + allFeedURLs[i]);
+function processAllFeeds() {
+	var allFeedURLs = [
+		"http://yle.fi/uutiset/rss/paauutiset.rss", 
+		"http://www.iltalehti.fi/rss.xml",
+		"http://asdf.asdf"
+	]
+	
+	for(i in allFeedURLs) {
+		try {
+			processSingleFeed(allFeedURLs[i])
+		} catch(e) {
+			console.log("Failed to insert data to MongoDB from feed url " + allFeedURLs[i]);
+		}
 	}
 }
+
+Meteor.startup(function() {
+	setInterval(function() {
+		processAllFeeds();
+	}, 10*60*1000);
+});
