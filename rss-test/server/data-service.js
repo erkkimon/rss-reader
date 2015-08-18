@@ -69,8 +69,7 @@ function processAllFeeds() {
 }
 
 Meteor.startup(function() {
-	processAllFeeds();
-	setInterval(function() {
-		processAllFeeds();
-	}, 15*1000);
+	Meteor.setInterval(function() {
+		processAllFeeds()
+	}, 15000)
 });
