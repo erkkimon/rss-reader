@@ -2,6 +2,13 @@ function url2json(inputURL) {
 	outputJSON = null;
 	try {
 		var inputXML = HTTP.get(inputURL);
+		var encoding = inputXML["headers"]["content-type"];
+		if(!/(UTF|utf)/g.test(encoding)) {
+			console.log("Encoding is not UTF-8: " + encoding)
+			inputXML = HTTP.getWithEncoding(inputURL, {
+				"encoding": { "from": "iso-8859-1", "to": "iso-8859-1" }
+			});
+		}
 		xml2js.parseString(inputXML["content"], function(err, res) {
 		outputJSON = res.rss.channel[0];
 	});
@@ -46,9 +53,8 @@ function processSingleFeed(url) {
 
 function processAllFeeds() {
 	var allFeedURLs = [
-		"http://yle.fi/uutiset/rss/paauutiset.rss", 
 		"http://www.iltalehti.fi/rss.xml",
-		"http://asdf.asdf"
+		"http://yle.fi/uutiset/rss/paauutiset.rss"
 	]
 	
 	for(i in allFeedURLs) {
@@ -60,7 +66,9 @@ function processAllFeeds() {
 	}
 }
 
+
 Meteor.startup(function() {
+	processAllFeeds();
 	setInterval(function() {
 		processAllFeeds();
 	}, 10*60*1000);

@@ -11,3 +11,4 @@ http
 anonyfox:scrape
 sergeyt:jquery-xml2json
 peerlibrary:xml2js
+rebolon:http-plugin-encoding
