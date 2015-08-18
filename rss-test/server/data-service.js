@@ -10,10 +10,11 @@ function url2json(inputURL) {
 			});
 		}
 		xml2js.parseString(inputXML["content"], function(err, res) {
-		outputJSON = res.rss.channel[0];
-	});
+			outputJSON = res.rss.channel[0];
+		});
 	} catch(e) {
 		console.log("url2json() failed to fetch and jsonify url " + inputURL);
+		console.log(e);
 	}
 	return outputJSON;
 }
@@ -62,14 +63,14 @@ function processAllFeeds() {
 			processSingleFeed(allFeedURLs[i])
 		} catch(e) {
 			console.log("Failed to insert data to MongoDB from feed url " + allFeedURLs[i]);
+			console.log(e);
 		}
 	}
 }
-
 
 Meteor.startup(function() {
 	processAllFeeds();
 	setInterval(function() {
 		processAllFeeds();
-	}, 10*60*1000);
+	}, 15*1000);
 });
