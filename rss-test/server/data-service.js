@@ -55,6 +55,9 @@ function processSingleFeed(url) {
 function processAllFeeds() {
 	var allFeedURLs = [
 		"http://www.iltalehti.fi/rss.xml",
+		"http://www.iltasanomat.fi/rss/tuoreimmat.xml",
+		"http://www.aamulehti.fi/rss/aamulehti_10_tuoreinta.rss",
+		"http://www.taloussanomat.fi/rss",
 		"http://yle.fi/uutiset/rss/paauutiset.rss"
 	]
 	
@@ -69,7 +72,8 @@ function processAllFeeds() {
 }
 
 Meteor.startup(function() {
+	processAllFeeds();
 	Meteor.setInterval(function() {
 		processAllFeeds()
-	}, 15000)
+	}, 1000*60*10)
 });
